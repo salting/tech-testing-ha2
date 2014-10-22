@@ -15,7 +15,7 @@ class TargetTests(unittest.TestCase):
     def setUp(self):
 
         self.USERNAME = 'tech-testing-ha2-10@bk.ru'
-        self.PASSWORD = os.environ.get('TTHA2PASSWORD', 'Pa$$w0rD-10')
+        self.PASSWORD = os.environ['TTHA2PASSWORD']
         self.DOMAIN = '@bk.ru'
         self.IMAGE = os.path.abspath('img.jpg')
         self.IMAGE_SMALL = os.path.abspath('test_image_1.png')
