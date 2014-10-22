@@ -24,7 +24,8 @@ class TargetTests(unittest.TestCase):
 
         self.driver = Remote(
             command_executor='http://127.0.0.1:4444/wd/hub',
-            desired_capabilities=getattr(DesiredCapabilities, browser).copy()
+            desired_capabilities=DesiredCapabilities.FIREFOX.copy()
+            #desired_capabilities=getattr(DesiredCapabilities, browser).copy()
         )
 
         auth_page = AuthPage(self.driver)
@@ -50,10 +51,10 @@ class TargetTests(unittest.TestCase):
     def test_platform(self):
         advertise = ThatAdvertise(self.driver)
         advertise.set_product()
-    
+
         platform = Platform(self.driver)
         platform.set_platform()
-    
+
         create_ads = CreateAds(self.driver)
         create_ads.set_title('test')
         create_ads.set_text('test')
@@ -61,40 +62,64 @@ class TargetTests(unittest.TestCase):
         create_ads.set_image_big(self.IMAGE_BIG)
         create_ads.set_link('http://www.odnoklassniki.ru/event/ID')
         create_ads.add()
-    
+
         create = CreateCompany(self.driver)
         create.click()
-    
+
         edit = Edit(self.driver)
         edit.click_edit()
-    
+
         platform_result = WebDriverWait(self.driver, 30, 0.1).until(
             lambda d: d.find_element_by_css_selector('.base-setting__pads-item__label').text
         )
-    
+
         self.assertEquals('Одноклассники: мобильная версия', platform_result.encode('utf-8'))
 
     def test_where(self):
-    
+
         where = Where(self.driver)
         where.click_asia()
-    
+
         create_ads = CreateAds(self.driver)
         create_ads.set_title('test')
         create_ads.set_text('test')
         create_ads.set_image(self.IMAGE)
         create_ads.set_link('www.target.mail.ru')
         create_ads.add()
-    
+
         create = CreateCompany(self.driver)
         create.click()
-    
+
         edit = Edit(self.driver)
         edit.click_edit()
-    
+
         getter_result = GetResult(self.driver)
-    
+
         self.assertEquals(True, getter_result.get_checked_asia())
+
+    def test_where_inner(self):
+        where = Where(self.driver)
+        where.click_arrow_asia()
+        where.click_inner_tag()
+
+        create_ads = CreateAds(self.driver)
+        create_ads.set_title('test')
+        create_ads.set_text('test')
+        create_ads.set_image(self.IMAGE)
+        create_ads.set_link('www.target.mail.ru')
+        create_ads.add()
+
+        create = CreateCompany(self.driver)
+        create.click()
+
+        edit = Edit(self.driver)
+        edit.click_edit()
+
+        where.click_arrow_asia()
+        getter_result = GetResult(self.driver)
+
+        self.assertEquals(True, getter_result.get_checked_inner_asia_1())
+        self.assertEquals(True, getter_result.get_checked_inner_asia_2())
 
     def test_age_restrictions(self):
         test_age = '0+'

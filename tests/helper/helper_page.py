@@ -70,7 +70,6 @@ class AuthForm(Component):
         self.driver.find_element_by_css_selector(self.PASSWORD).send_keys(pwd)
 
     def set_domain(self, domain):
-        print domain
         select = self.driver.find_element_by_css_selector(self.DOMAIN)
         Select(select).select_by_visible_text(domain)
 
@@ -186,10 +185,26 @@ class AgeRestrictions(Component):
 
 class Where(Component):
     ASIA = '//*[@id="regions100003"]/input'
+    ARROW_ASIA = '//*[@id="regions100003"]/span[1]'
+    INNER_TAG_1 = '//*[@id="regions204"]/label'
+    INNER_TAG_2 = '//*[@id="regions222"]/label'
 
     def click_asia(self):
         WebDriverWait(self.driver, 40, 0.1).until(
             lambda d: d.find_element_by_xpath(self.ASIA)
+        ).click()
+
+    def click_arrow_asia(self):
+        WebDriverWait(self.driver, 40, 0.1).until(
+            lambda d: d.find_element_by_xpath(self.ARROW_ASIA)
+        ).click()
+
+    def click_inner_tag(self):
+        WebDriverWait(self.driver, 40, 0.1).until(
+            lambda d: d.find_element_by_xpath(self.INNER_TAG_1)
+        ).click()
+        WebDriverWait(self.driver, 40, 0.1).until(
+            lambda d: d.find_element_by_xpath(self.INNER_TAG_2)
         ).click()
 
 
@@ -205,15 +220,27 @@ class Edit(Component):
 class GetResult(Component):
     ASIA = '//*[@id="regions100003"]/input'
     RESTRICT = '/html/body/div[1]/div[5]/div/div[2]/div/div[1]/div[7]/div/div[2]/ul/li[3]/div/div[2]/span'
+    INNER_TAG_1 = '//*[@id="regions204"]/input'
+    INNER_TAG_2 = '//*[@id="regions222"]/input'
 
     def get_checked_asia(self):
-        asia = WebDriverWait(self.driver, 40, 0.1).until(
+        asia = WebDriverWait(self.driver, 30, 0.1).until(
             lambda d: d.find_element_by_xpath(self.ASIA)
         )
         return asia.is_selected()
 
+    def get_checked_inner_asia_1(self):
+        return WebDriverWait(self.driver, 30, 0.1).until(
+            lambda d: d.find_element_by_xpath(self.INNER_TAG_1)
+        ).is_selected()
+
+    def get_checked_inner_asia_2(self):
+        return WebDriverWait(self.driver, 30, 0.1).until(
+            lambda d: d.find_element_by_xpath(self.INNER_TAG_2)
+        ).is_selected()
+
     def get_text_age(self):
-        text = WebDriverWait(self.driver, 40, 0.1).until(
+        text = WebDriverWait(self.driver, 30, 0.1).until(
             lambda d: d.find_element_by_xpath(self.RESTRICT).text
         )
         return text
